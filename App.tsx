@@ -1,118 +1,120 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {ThemeProvider as MagnusThemeProvider} from 'react-native-magnus';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+import {QueryClient, QueryClientProvider} from 'react-query';
 
-function Section({children, title}: SectionProps): React.JSX.Element {
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+
+import {Home} from './src/screens/Home';
+import {EnterAPIKey} from './src/screens/EnterAPIKey';
+import {EnterPlaybackURL} from './src/screens/EnterPlaybackURL';
+
+import { ViewStream } from './src/screens/VieweStream';
+import {BroadcastStream} from './src/screens/BroadcastStream';
+
+AntDesign.loadFont();
+
+const queryClient = new QueryClient();
+
+const RootStack = createStackNavigator();
+const MainStack = createStackNavigator();
+
+const RootStackScreen = () => (
+  <RootStack.Navigator mode="modal">
+    <RootStack.Screen
+      name="main"
+      options={{headerShown: false}}
+      component={MainStackScreen}
+    />
+    <RootStack.Screen
+      name="enter_api_key"
+      options={{headerShown: false}}
+      component={EnterAPIKey}
+    />
+    <RootStack.Screen
+      name="enter_playback_url"
+      options={{headerShown: false}}
+      component={EnterPlaybackURL}
+    />
+  </RootStack.Navigator>
+);
+
+const MainStackScreen = () => (
+  <MainStack.Navigator headerMode="float">
+    <MainStack.Screen
+      name="home"
+      options={{
+        title: 'Home',
+        headerShown: false,
+      }}
+      component={Home}
+    />
+    <MainStack.Screen
+      name="broadcast_stream"
+      options={{
+        title: 'Broadcast Stream',
+        headerShown: false,
+      }}
+      component={BroadcastStream}
+    />
+    <MainStack.Screen
+      name="view_stream"
+      options={{
+        title: 'View Stream',
+        headerShown: false,
+      }}
+      component={ViewStream}
+    />
+  </MainStack.Navigator>
+);
+
+const theme = {
+  fontSize: {
+    normal: 16,
+    bigText100: 32,
+  },
+  colors: {
+    violet100: '#e1e1e1',
+  },
+  spacing: {
+    xs: 2,
+    '5xl': 64,
+  },
+  shadow: {
+    heavy: {
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      shadowOpacity: 1,
+      shadowRadius: 4.65,
+
+      elevation: 4,
+    },
+  },
+} as any;
+
+export default () => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
+    <QueryClientProvider client={queryClient}>
+      <MagnusThemeProvider theme={theme}>
+        <SafeAreaView
           style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            flex: 1,
+            backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+          <NavigationContainer>
+            <RootStackScreen />
+          </NavigationContainer>
+        </SafeAreaView>
+      </MagnusThemeProvider>
+    </QueryClientProvider>
   );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+};

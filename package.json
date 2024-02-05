@@ -10,8 +10,23 @@
     "test": "jest"
   },
   "dependencies": {
+    "@livepeer/react-native": "^0.0.1",
+    "@react-native-clipboard/clipboard": "react-native-community/clipboard",
+    "@react-native-community/clipboard": "^1.5.1",
+    "@react-navigation/core": "^6.4.10",
+    "@react-navigation/native": "^6.1.9",
+    "@react-navigation/stack": "^6.3.20",
+    "expo-av": "^13.10.4",
     "react": "18.2.0",
-    "react-native": "0.73.3"
+    "react-native": "0.73.3",
+    "react-native-magnus": "^1.0.63",
+    "react-native-nodemediaclient": "^0.2.21",
+    "react-native-simple-toast": "^3.2.0",
+    "react-native-svg": "^14.1.0",
+    "react-native-vector-icons": "^10.0.3",
+    "react-native-video": "^5.2.1",
+    "react-query": "^3.39.3",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
